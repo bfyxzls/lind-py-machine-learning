@@ -1,5 +1,7 @@
 # 阶段 0 · 第 3 节：Pandas 表格（DataFrame）
 
+Pandas 是 Python 里用于表格数据处理和分析的核心库。你可以把它理解成“Python 版的 Excel”，但能力远不止 Excel：它能处理百万行级数据、做复杂筛选分组、清洗缺失值、合并多张表，并且能和 NumPy、scikit-learn、Matplotlib 无缝配合。在机器学习流程里，Pandas 通常负责读数据、清洗数据、探索性分析、构造特征这一段。
+
 ## 学习目标
 
 - 会创建、查看 `DataFrame`

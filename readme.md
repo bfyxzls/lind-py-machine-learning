@@ -11,10 +11,10 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-**学习路线与课件：** 见 [lessons/README.md](lessons/README.md)  
-**命令速查：** 见 [basic.md](basic.md)
+**学习路线与课件：** 见 [docs/README.md](docs/README.md)  
+**命令速查：** 见 [docs/basic.md](docs/basic.md)
 
-每个主题包含可运行的 `.py` 与讲解用的 `.md`（目标、直觉、预期输出、报错、练习）。
+文档在 `docs/`，可运行代码在 `lessons/`（同名对应，如 `docs/stage0/02_numpy_array.md` ↔ `lessons/stage0/02_numpy_array.py`）。
 
 ## 最终项目（乳腺癌二分类）
 

@@ -1,5 +1,7 @@
 # 阶段 0 · 第 2 节：NumPy 数组直觉
 
+NumPy 是 Python 里做数值计算的基础库，核心是提供了一个高性能的多维数组对象 ndarray，以及大量对数组进行数学运算的函数。你可以把它理解成“Python 版的 MATLAB 数组”，或者“没有标签、只有数字的 Pandas DataFrame”。在机器学习里，NumPy 是底层计算引擎：Pandas 的列、scikit-learn 的模型输入、PyTorch/TensorFlow 的张量，底层都和 NumPy 数组高度兼容。
+
 ## 学习目标
 
 - 理解 `ndarray`、`shape`、`dtype`

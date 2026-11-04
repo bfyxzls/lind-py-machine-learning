@@ -1,5 +1,7 @@
 # 阶段 6：FastAPI 预测接口
 
+FastAPI 是一个现代、高性能的 Python Web 框架，特别适合做机器学习模型的 HTTP 预测服务：用类型注解自动生成请求校验和交互式文档（`/docs`）。你可以把它理解成「模型的前台窗口」——外面用 JSON 传入特征，里面加载 `joblib` 保存的 Pipeline，返回类别与概率。关键点是 API 契约必须与训练一致（特征个数与顺序）；先提供 `/health`、`/features`，再提供 `/predict`，调试会轻松很多。
+
 ## 学习目标
 
 - 加载 `joblib` 模型并提供 HTTP 预测
@@ -58,7 +60,7 @@ Invoke-RestMethod http://127.0.0.1:8000/health
 ## 练习
 
 1. 用 `/docs` 成功调用一次 `/predict`。
-2. 为项目根目录写/完善 README：如何安装、训练、启动 API（可参考仓库 `readme.md` 学习约定，另写「项目使用说明」）。
+2. 为项目根目录写/完善 README：如何安装、训练、启动 API（可参考仓库根目录 `readme.md` 与 `docs/README.md`）。
 
 ## 项目收尾检查清单
 

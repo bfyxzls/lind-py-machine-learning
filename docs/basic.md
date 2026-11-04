@@ -8,8 +8,9 @@
 
 ## 学习入口
 
-- 路线总览：`lessons/README.md`
-- 每课先读同名 `.md`，再运行对应 `.py`
+- 路线总览：[README.md](./README.md)
+- 课件文档在 `docs/stage*/`，代码在 `lessons/stage*/`（同名对应）
+- 每课先读 `.md`，再运行对应 `.py`
 
 ## 示例运行
 

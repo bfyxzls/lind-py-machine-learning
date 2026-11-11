@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>飞桨 UIE · 训推流程图</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #f5f5f5;
+      --color-ink:     #2d3142;
+      --color-muted:   #4f5d75;
+      --color-accent:  #bf4520;
+      --font-sans:     'Geist', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+      --font-serif:    'Instrument Serif', 'Noto Serif SC', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1100px; width: 100%; min-width: 0; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .lede {
+      font-size: 0.95rem;
+      color: var(--color-muted);
+      margin-bottom: 1.5rem;
+      max-width: 42rem;
+      line-height: 1.5;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    .cards {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 0.9fr;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid rgba(45,49,66,0.12);
+      border-radius: 6px;
+      padding: 0.9rem 1rem;
+    }
+    .card h3 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+    .card p {
+      font-size: 0.78rem;
+      color: var(--color-muted);
+      line-height: 1.45;
+    }
+    .card code {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--color-ink);
+    }
+    @media print {
+      .diagram-container { overflow-x: visible; }
+      svg { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Flowchart · baidu_uie · default skin</p>
+    <h1>飞桨 UIE · 训推流程</h1>
+    <p class="lede">从数据准备到 HTTP 抽取：是否微调决定走零样本还是 checkpoint；训练主路径高亮为导出 <code>export</code> 与服务化。</p>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 960 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="uie-flow-title uie-flow-desc">
+        <title id="uie-flow-title">飞桨 UIE 训推流程图</title>
+        <desc id="uie-flow-desc">流程图：准备数据后判断是否微调；否走零样本推理，是则训练导出 export，再验收并启动 MVP /extract 服务。</desc>
+        <defs>
+          <pattern id="uie-dots" width="22" height="22" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="0.9" fill="rgba(45,49,66,0.10)"/>
+          </pattern>
+          <marker id="uie-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/>
+          </marker>
+          <marker id="uie-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#bf4520"/>
+          </marker>
+          <marker id="uie-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/>
+          </marker>
+        </defs>
+
+        <rect width="960" height="700" fill="#f5f5f5"/>
+        <rect width="960" height="700" fill="url(#uie-dots)" opacity="0.55"/>
+
+        <!-- Connectors (behind nodes) -->
+        <!-- start → data -->
+        <line x1="480" y1="72" x2="480" y2="100" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#uie-arrow)"/>
+        <!-- data → diamond -->
+        <line x1="480" y1="156" x2="480" y2="188" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#uie-arrow)"/>
+        <!-- diamond NO → zero-shot (right) -->
+        <line x1="580" y1="248" x2="700" y2="248" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#uie-arrow)"/>
+        <!-- diamond YES → train (down, accent) -->
+        <line x1="480" y1="308" x2="480" y2="340" stroke="#bf4520" stroke-width="1.4" marker-end="url(#uie-arrow-accent)"/>
+        <!-- train → export -->
+        <line x1="480" y1="396" x2="480" y2="424" stroke="#bf4520" stroke-width="1.4" marker-end="url(#uie-arrow-accent)"/>
+        <!-- export → infer -->
+        <line x1="480" y1="480" x2="480" y2="508" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#uie-arrow)"/>
+        <!-- infer → mvp -->
+        <line x1="480" y1="564" x2="480" y2="588" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#uie-arrow-link)"/>
+        <!-- zero-shot down elbow to merge then optional note - skip merge to stay simple; zero-shot is terminal -->
+
+        <!-- Arrow labels (Chinese → 12px sans, mask 16px tall) -->
+        <rect x="620" y="232" width="40" height="16" rx="2" fill="#f5f5f5"/>
+        <text x="640" y="244" fill="#4f5d75" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">否</text>
+
+        <rect x="492" y="316" width="40" height="16" rx="2" fill="#f5f5f5"/>
+        <text x="512" y="328" fill="#bf4520" font-size="12" font-weight="500" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">是</text>
+
+        <!-- Nodes -->
+        <!-- Start -->
+        <rect x="400" y="24" width="160" height="48" rx="20" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)" stroke-width="1"/>
+        <text x="480" y="52" fill="#2d3142" font-size="13" font-weight="600" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">开始训推</text>
+
+        <!-- Data prep -->
+        <rect x="380" y="100" width="200" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="480" y="124" fill="#2d3142" font-size="13" font-weight="600" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">准备 JSONL 数据</text>
+        <text x="480" y="142" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">00_gen / 真实标注</text>
+
+        <!-- Diamond: fine-tune? -->
+        <polygon points="480,188 580,248 480,308 380,248" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="480" y="244" fill="#2d3142" font-size="13" font-weight="600" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">需要微调？</text>
+        <text x="480" y="262" fill="#5a6580" font-size="10" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">少样本 / 领域适配</text>
+
+        <!-- Zero-shot end -->
+        <rect x="700" y="224" width="200" height="48" rx="20" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)" stroke-width="1"/>
+        <text x="800" y="244" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">零样本推理</text>
+        <text x="800" y="260" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">06_zero_shot_infer</text>
+
+        <!-- Train (accent path) -->
+        <rect x="380" y="340" width="200" height="56" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+        <text x="480" y="364" fill="#2d3142" font-size="13" font-weight="600" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">微调训练</text>
+        <text x="480" y="382" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">02_train_uie.py</text>
+
+        <!-- Export (accent) -->
+        <rect x="380" y="424" width="200" height="56" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+        <text x="480" y="448" fill="#2d3142" font-size="13" font-weight="600" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">导出 export</text>
+        <text x="480" y="466" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">checkpoint/export</text>
+
+        <!-- Infer check -->
+        <rect x="380" y="508" width="200" height="56" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="480" y="532" fill="#2d3142" font-size="13" font-weight="600" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">推理验收</text>
+        <text x="480" y="550" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">05_infer_checkpoint</text>
+
+        <!-- MVP HTTP end (link treatment) -->
+        <rect x="380" y="588" width="200" height="48" rx="20" fill="rgba(46,90,168,0.06)" stroke="#2e5aa8" stroke-width="1"/>
+        <text x="480" y="608" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">MVP · POST /extract</text>
+        <text x="480" y="624" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">mvp_worker :8088</text>
+
+        <!-- Legend (bottom strip) -->
+        <line x1="40" y1="648" x2="920" y2="648" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <text x="40" y="668" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+        <rect x="120" y="658" width="20" height="10" rx="5" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)" stroke-width="1"/>
+        <text x="148" y="667" fill="#4f5d75" font-size="11" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif">起止</text>
+        <rect x="200" y="658" width="20" height="10" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="228" y="667" fill="#4f5d75" font-size="11" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif">步骤</text>
+        <polygon points="292,663 302,658 312,663 302,668" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="320" y="667" fill="#4f5d75" font-size="11" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif">判断</text>
+        <rect x="372" y="658" width="20" height="10" rx="2" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+        <text x="400" y="667" fill="#4f5d75" font-size="11" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif">微调主路径</text>
+        <rect x="492" y="658" width="20" height="10" rx="5" fill="rgba(46,90,168,0.06)" stroke="#2e5aa8" stroke-width="1"/>
+        <text x="520" y="667" fill="#4f5d75" font-size="11" font-family="'Geist', 'Noto Sans SC', 'Microsoft YaHei', sans-serif">HTTP 服务</text>
+      </svg>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>数据</h3>
+        <p><code>scripts/00_gen_synthetic_data.py</code> 或真实 JSONL；schema 见 <code>configs/schema_review.json</code>。</p>
+      </div>
+      <div class="card">
+        <h3>训练主路径</h3>
+        <p><code>02_train_uie.py</code> → <code>models/.../checkpoint/export</code>；成功标志 <code>TRAIN_OK</code>。</p>
+      </div>
+      <div class="card">
+        <h3>服务</h3>
+        <p>设置 <code>UIE_MODEL_PATH</code> 后 <code>python -m mvp_worker</code>；测 <code>/health</code> 与 <code>/extract</code>。</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

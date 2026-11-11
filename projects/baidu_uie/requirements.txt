@@ -1,0 +1,25 @@
+# 飞桨 UIE 项目依赖（建议独立 conda/venv，勿与主仓库 sklearn 环境混用）
+# Python 建议 3.10 / 3.11（64 位）
+#
+# CPU（本机 Windows）优先清华源（官方 cpu 源在部分网络下会 No matching distribution）:
+#   python -m pip install "paddlepaddle==2.6.2" "numpy>=1.21,<2" -i https://pypi.tuna.tsinghua.edu.cn/simple
+# 备选: -i https://pypi.org/simple  或  -i https://mirror.baidu.com/pypi/simple
+#
+# GPU（CUDA 11.8，与文档一致，Linux GPU Pod）:
+#   python -m pip install paddlepaddle-gpu==2.6.2 -i https://www.paddlepaddle.org.cn/packages/stable/cu118/
+
+# Linux / 有 tool-helpers 轮子的环境可用本文件。
+# Windows 请改用 requirements-windows.txt + paddlenlp --no-deps（见 PROJECT.md）。
+paddlenlp==2.8.1
+aistudio-sdk==0.1.7
+numpy>=1.21,<2
+pandas==2.0.3
+pyarrow==12.0.1
+datasets==2.18.0
+huggingface-hub>=0.19.2,<0.24
+tqdm
+charset-normalizer==3.3.2
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.6
+

@@ -1,0 +1,34 @@
+# Windows 专用：paddlenlp 依赖的 tool-helpers 仅有 Linux 轮子，不能写进同一条 pip install。
+# 请按 PROJECT.md「Windows 安装」两步走：先装本文件，再 --no-deps 装 paddlenlp。
+
+jieba
+colorlog
+colorama
+seqeval
+dill<0.3.5
+multiprocess<=0.70.12.2
+datasets==2.18.0
+tqdm
+paddlefsl
+sentencepiece
+# paddlenlp 2.8.1 与 huggingface-hub 2.x 不兼容
+huggingface-hub>=0.19.2,<0.24
+onnx>=1.10.0
+# paddle2onnx / tool-helpers：仅 Linux 轮子，Windows 跳过（UIE 训推不需要）
+Flask-Babel
+visualdl
+fastapi>=0.110
+uvicorn[standard]>=0.27
+typer
+rich
+safetensors
+aistudio-sdk==0.1.7
+jinja2
+regex
+protobuf==3.20.2
+charset-normalizer==3.3.2
+numpy>=1.21,<2
+pandas==2.0.3
+pyarrow==12.0.1
+pydantic>=2.6
+

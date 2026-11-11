@@ -1,0 +1,19 @@
+{
+  "data_type": "review",
+  "dataset_version": "review/smoke-v0.1.0",
+  "pretrained_model": "uie-mini",
+  "device": "cpu",
+  "max_seq_length": 256,
+  "learning_rate": 1e-5,
+  "num_epochs": 2,
+  "batch_size": 4,
+  "seed": 42,
+  "logging_steps": 5,
+  "save_steps": 50,
+  "eval_steps": 50,
+  "schema": ["商品属性", "评价词", "情感极性"],
+  "notes": [
+    "本机 CPU 冒烟用 uie-mini",
+    "情感极性按原规则：文本内显式标签 + UIE span 抽取"
+  ]
+}

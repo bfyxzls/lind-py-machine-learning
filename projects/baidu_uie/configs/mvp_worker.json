@@ -1,0 +1,9 @@
+{
+  "host": "127.0.0.1",
+  "port": 8088,
+  "schema": ["商品属性", "评价词", "情感极性"],
+  "model_path_env": "UIE_MODEL_PATH",
+  "fallback_model": "uie-mini",
+  "device": "cpu",
+  "enrich_polarity": false
+}

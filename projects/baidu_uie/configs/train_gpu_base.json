@@ -1,0 +1,20 @@
+{
+  "data_type": "review",
+  "dataset_version": "review/smoke-v0.1.0",
+  "pretrained_model": "uie-base",
+  "device": "gpu",
+  "max_seq_length": 512,
+  "learning_rate": 1e-5,
+  "num_epochs": 3,
+  "batch_size": 2,
+  "seed": 42,
+  "logging_steps": 5,
+  "save_steps": 50,
+  "eval_steps": 50,
+  "schema": ["商品属性", "评价词", "情感极性"],
+  "notes": [
+    "对齐文档 GPU 栈：paddle 2.6.2 cu118 + paddlenlp 2.8.1",
+    "情感极性按原规则：文本内显式标签 + UIE span 抽取",
+    "OOM 则 batch_size=1 或改 uie-mini"
+  ]
+}
